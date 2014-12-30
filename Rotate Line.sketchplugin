@@ -1,0 +1,19 @@
+// (ctrl cmd l)
+// Rotate lines
+
+if (selection.count() > 0)
+{
+    // Show dialog
+    var angle = parseInt([doc askForUserInput:'Rotation Angle' initialValue:'Angle to rotate line']);
+
+    for (var i=0; i<selection.count(); i++) {
+        var layer = selection[i];
+        [layer setRotation:angle];
+    }
+
+}
+else
+{
+    // No layer selected
+    [doc showMessage: "Rotate Line: You need to select at least one layer"];
+}
