@@ -61,8 +61,9 @@ if (selection.count() > 0)
         [doc showMessage: "Rotate Line: Invalid value provided. Please try again."];
     }
 
-    for (var i=0; i<selection.count(); i++) {
-        var layer = selection[i]
+    var loop = [selection objectEnumerator]
+
+    while (layer = [loop nextObject]) {
 
         if (doRotateRelative){
             angle = angle + [layer rotation]
