@@ -4,10 +4,15 @@
 if (selection.count() > 0)
 {
     // Show dialog
-    var angle = parseInt([doc askForUserInput:'Rotation Angle' initialValue:'Angle to rotate line']);
+    var angle = parseInt([doc askForUserInput: "Rotation Angle" initialValue: "Angle to rotate line"]);
+
+    if (angle < 0) {
+      angle = 360 - (-1 * angle);
+    }
 
     for (var i=0; i<selection.count(); i++) {
         var layer = selection[i];
+        angle = angle + [layer rotation];
         [layer setRotation:angle];
     }
 
