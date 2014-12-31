@@ -3,17 +3,78 @@
 
 if (selection.count() > 0)
 {
-    // Show dialog
-    var angle = parseInt([doc askForUserInput: "Rotation Angle" initialValue: "Angle to rotate line"]);
+    var pluginView = [[NSView alloc] initWithFrame: NSMakeRect(0,35,400,80)]
+
+    var rotationAngleLabel = [[NSTextField alloc] initWithFrame: NSMakeRect(0,52,44,23)]
+    [rotationAngleLabel setStringValue: "Angle"]
+    [[rotationAngleLabel cell] setBordered: "NO"]
+    [[rotationAngleLabel cell] setBezeled: "NO"]
+    [rotationAngleLabel setEditable: "NO"]
+    [rotationAngleLabel setSelectable: "NO"]
+    [rotationAngleLabel setBackgroundColor: [NSColor clearColor]]
+    [pluginView addSubview: rotationAngleLabel]
+
+    var rotationAngleDegreeLabel = [[NSTextField alloc] initWithFrame: NSMakeRect(85,52,44,23)]
+    [rotationAngleDegreeLabel setStringValue: "°"]
+    [[rotationAngleDegreeLabel cell] setBordered: "NO"]
+    [[rotationAngleDegreeLabel cell] setBezeled: "NO"]
+    [rotationAngleDegreeLabel setEditable: "NO"]
+    [rotationAngleDegreeLabel setSelectable: "NO"]
+    [rotationAngleDegreeLabel setBackgroundColor: [NSColor clearColor]]
+    [pluginView addSubview: rotationAngleDegreeLabel]
+
+    var rotationAngle = [[NSTextField alloc] initWithFrame: NSMakeRect(45,55,35,23)]
+    [[rotationAngle cell] setAlignment: NSRightTextAlignment]
+    [pluginView addSubview: rotationAngle]
+
+    var rotateRelative = [[NSButton alloc] initWithFrame: NSMakeRect(0,0,250,32)]
+    [rotateRelative setButtonType: NSSwitchButton]
+    [rotateRelative setTitle: "Rotate relative to current position"]
+    [rotateRelative setState: NSOnState]
+    [pluginView addSubview: rotateRelative]
+
+    var rotateCopy = [[NSButton alloc] initWithFrame: NSMakeRect(0,20,250,32)]
+    [rotateCopy setButtonType: NSSwitchButton]
+    [rotateCopy setTitle: "Rotate a copy"]
+    [pluginView addSubview: rotateCopy]
+
+    var alert = [[NSAlert alloc] init]
+    [alert setMessageText: "Rotate Line"]
+    [alert setInformativeText: "Set angle to rotate the selected lines."]
+    [alert addButtonWithTitle: "OK"]
+    [alert addButtonWithTitle: "Cancel"]
+    [alert setAccessoryView: pluginView]
+
+    var responseCode = [alert runModal]
+
+    var angle = [rotationAngle intValue]
+
+    var doRotateRelative = [rotateRelative intValue]
+
+    var doRotateCopy = [rotateCopy intValue]
 
     if (angle < 0) {
-      angle = 360 - (-1 * angle);
+        angle = 360 - (-1 * angle)
+    }
+
+    if (angle > 360) {
+        [doc showMessage: "Rotate Line: Invalid value provided. Please try again."];
     }
 
     for (var i=0; i<selection.count(); i++) {
-        var layer = selection[i];
-        angle = angle + [layer rotation];
-        [layer setRotation:angle];
+        var layer = selection[i]
+
+        if (doRotateRelative){
+            angle = angle + [layer rotation]
+        }
+
+        if (doRotateCopy) {
+            layer = [layer duplicate]
+        }
+
+        [layer setRotation: angle]
+        [[doc currentPage] deselectAllLayers]
+        [layer setIsSelected: true]
     }
 
 }
