@@ -1,6 +1,4 @@
 Sketch_RotateLine
 =================
 
-A simple plugin to allow line rotation within Sketch.
-
-Negative values reverse the direction of rotation.
+More precise rotation for line objects in Sketch compared to the native Rotate tool, which only offers arbitrary rotation. Includes a 'Rotate a Copy' feature and Relative and Absolute rotation as well.
